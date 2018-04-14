@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:background="@color/ContentOverlay"
+    android:layout_margin="4dp"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/ic_launcher_background"
+        android:alpha=".4"/>
+    <TextView
+        android:id="@+id/genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/Content"
+        android:text="Genre"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"/>
+    <ImageView
+        android:id="@+id/like"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_margin="3dp"
+        android:layout_gravity="bottom|left"
+        app:srcCompat="@drawable/ratings"/>
+</FrameLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BackgroundDark">#000c22</color>
+    <color name="Background">#000733</color>
+    <color name="BackgroundContent">#040e47</color>
+    <color name="Accent">#7689f2</color>
+    <color name="Content">#FFFFFF</color>
+    <color name="ContentOverlay">#282828</color>
+</resources>
