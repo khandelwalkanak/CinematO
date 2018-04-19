@@ -38,8 +38,12 @@ public class MovieGenre {
         result.enqueue(new Callback<MovieResult>() {
             @Override
             public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
-                    ArrayList<Movie> movies = response.body().movies;
+                Log.e("RESPONSE", "onResponse: "+response.code());
+                Log.e("RESPONSE", "onResponse: "+response.body().movies.size());
+                if(response.body().movies!=null) {
+                    ArrayList<Movie> movies = new ArrayList<>(response.body().movies);
                     path = movies.get(0).backdrop_path;
+                }
                 internalCall.set(position);
             }
 

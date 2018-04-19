@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.example.sahni.cinemato.DataClasses.FavouriteMovies;
+import com.example.sahni.cinemato.DataClasses.LikedMovieGenre;
 import com.example.sahni.cinemato.DataClasses.Movie;
 import com.example.sahni.cinemato.DataClasses.MovieGenre;
 import com.example.sahni.cinemato.DataClasses.MovieGenreRelationship;
@@ -26,10 +27,10 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface Data {
     //Movies
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = REPLACE)
     void insertMovies(ArrayList<Movie> movies);
     @Insert(onConflict = REPLACE)
-    void updateMovie(Movie movie);
+    void insertMovie(Movie movie);
     @Query("SELECT * from Movie where id = :id")
     Movie selectedMovie(long id);
 
@@ -47,14 +48,10 @@ public interface Data {
     List<MovieGenreRelationship> getRelations();
 
     //Genre
-    @Insert(onConflict = IGNORE)
+    @Insert(onConflict = REPLACE)
     void insertGenre(ArrayList<MovieGenre> genres);
     @Query("SELECT * from MovieGenre where id = :id")
     MovieGenre selectedGenre(long id);
-    @Query("UPDATE MovieGenre SET isLiked=:isLiked where id=:id")
-    void  updateLiked(long id,boolean isLiked);
-    @Query("SELECT * from MovieGenre where isLiked=:isLiked")
-    List<MovieGenre> getLiked(boolean isLiked);
     @Query("SELECT * from MovieGenre order by name ASC")
     List<MovieGenre> getGenre();
 
@@ -67,6 +64,16 @@ public interface Data {
     List<Long> getAllFavourites();
     @Delete
     void deleteFavourite(FavouriteMovies movies);
+
+    //LikedGenre
+    @Insert(onConflict = IGNORE)
+    void insertLiked(LikedMovieGenre genre);
+    @Query("SELECT * from LikedMovieGenre where genreId = :id Order by id ASC")
+    LikedMovieGenre getLiked(long id);
+    @Query("SELECT genreId from LikedMovieGenre")
+    List<Long> getAllLiked();
+    @Delete
+    void deleteLiked(LikedMovieGenre genre);
 
     //UpcomingMovies
     @Insert(onConflict = IGNORE)

@@ -47,14 +47,19 @@ public class UpcomingMoviesPagerAdapter extends FragmentPagerAdapter {
         for(int i=0;i<fragments.size();i++){
             Fragment fragment= fragments.get(i);
             if(fragment instanceof MovieItemFragment) {
+                MovieItemFragment frag=(MovieItemFragment) fragment;
                 int position=fragment.getArguments().getInt(PositionKey);
                 View fragmentView=fragment.getView();
+                //UPDATE LIKE
                 ImageView favourite=fragmentView.findViewById(R.id.favourite);
                 DatabaseClient client=DatabaseClient.getInstance(fragment.getActivity());
                 if (client.data().getFavourite(upcomingMovies.get(position).id)!=null)
                     favourite.setImageResource(R.drawable.favourite);
                 else
                     favourite.setImageResource(R.drawable.un_favourite);
+                //UPDATE DESCRIPTION
+                TextView description=fragmentView.findViewById(R.id.description);
+                description.setText(frag.getGenreDescription(upcomingMovies.get(position).id));
             }
         }
     }
@@ -87,7 +92,7 @@ public class UpcomingMoviesPagerAdapter extends FragmentPagerAdapter {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View itemView=inflater.inflate(R.layout.movie_upcoming,container,false);
+            final View itemView=inflater.inflate(R.layout.movie_upcoming,container,false);
             ImageView poster=itemView.findViewById(R.id.poster);
             ImageView backdrop=itemView.findViewById(R.id.backdrop);
             TextView title=itemView.findViewById(R.id.title);
@@ -127,10 +132,30 @@ public class UpcomingMoviesPagerAdapter extends FragmentPagerAdapter {
                     updateAllLists.updateAll();
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ImageView fav=itemView.findViewById(R.id.favourite);
+                    long id= (long) fav.getTag();
+                    Movie movie=DatabaseClient.getInstance(getActivity()).data().selectedMovie(id);
+                    if(client.data().getFavourite(movie.id)!=null) {
+                        FavouriteMovies movies=client.data().getFavourite(id);
+                        client.data().deleteFavourite(movies);
+                        fav.setImageResource(R.drawable.un_favourite);
+                    }
+                    else {
+                        client.data().insertFavourite(new FavouriteMovies(id));
+                        fav.setImageResource(R.drawable.favourite);
+                        Toast.makeText(getActivity(),"Added to Favourites",Toast.LENGTH_SHORT).show();
+                    }
+                    updateAllLists.updateAll();
+                    return true;
+                }
+            });
             return itemView;
         }
 
-        private String getGenreDescription(long id) {
+        public String getGenreDescription(long id) {
             List<Long> genre=client.data().getGenreIds(id);
             ArrayList<String> name=new ArrayList<>();
             StringBuffer buffer=new StringBuffer();

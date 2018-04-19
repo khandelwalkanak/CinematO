@@ -138,7 +138,7 @@ public class MovieAsync {
     }
     public static ArrayList<Long> GetTop(){
         final ArrayList<Long> ids=new ArrayList<>();
-        AsyncTaskWithResponse.ResultSet<List<Long>> resultSet= new AsyncTaskWithResponse.ResultSet<List<Long>>() {
+        AsyncTaskWithResponse.ResultSet<List<Long>> resultSet=new AsyncTaskWithResponse.ResultSet<List<Long>>() {
             @Override
             public void onResult(List<Long> longs) {
                 ids.addAll(longs);

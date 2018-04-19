@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.sahni.cinemato.Constant;
 import com.example.sahni.cinemato.DataBase.DatabaseClient;
+import com.example.sahni.cinemato.DataClasses.LikedMovieGenre;
 import com.example.sahni.cinemato.DataClasses.Movie;
 import com.example.sahni.cinemato.DataClasses.MovieGenre;
 import com.example.sahni.cinemato.R;
@@ -53,27 +54,45 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.Holder> {
         holder.genre.setText(genres.get(position).name);
         holder.itemView.setTag(genres.get(position).id);
         if(layout==R.layout.genre_item) {
+            holder.like.setTag(genres.get(position).id);
             Picasso.get().load(Constant.imageUrl + Constant.Medium + genres.get(position).path).into(holder.backdrop);
             if (client.data().selectedGenre(genres.get(position).id)!=null) {
-                if ((client.data().selectedGenre(genres.get(position).id).isLiked) && (client.data().selectedGenre(genres.get(position).id) != null))
-                    holder.like.setVisibility(View.VISIBLE);
+                if (client.data().getLiked(genres.get(position).id)!=null)
+                    holder.like.setImageResource(R.drawable.ratings);
                 else
-                    holder.like.setVisibility(View.GONE);
+                    holder.like.setImageResource(R.drawable.unlike);
             }
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     ImageView like = v.findViewById(R.id.like);
-                    long id = (long) v.getTag();
-                    if (client.data().selectedGenre(id).isLiked) {
-                        client.data().updateLiked(id, false);
-                        like.setVisibility(View.GONE);
+                    long id = (long) like.getTag();
+                    if (client.data().getLiked(id)!=null) {
+                        LikedMovieGenre likedGenre=client.data().getLiked(id);
+                        client.data().deleteLiked(likedGenre);
+                        like.setImageResource(R.drawable.unlike);
                     } else {
-                        client.data().updateLiked(id, true);
-                        like.setVisibility(View.VISIBLE);
+                        client.data().insertLiked(new LikedMovieGenre(id));
+                        like.setImageResource(R.drawable.ratings);
                         Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
                     }
                     return true;
+                }
+            });
+            holder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView like=(ImageView)v;
+                    long id = (long) like.getTag();
+                    if (client.data().getLiked(id)!=null) {
+                        LikedMovieGenre likedGenre=client.data().getLiked(id);
+                        client.data().deleteLiked(likedGenre);
+                        like.setImageResource(R.drawable.unlike);
+                    } else {
+                        client.data().insertLiked(new LikedMovieGenre(id));
+                        like.setImageResource(R.drawable.ratings);
+                        Toast.makeText(context, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -83,10 +102,10 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.Holder> {
                 @Override
                 public boolean onLongClick(View v) {
                     long id = (long) v.getTag();
-                    client.data().updateLiked(id, false);
+                    LikedMovieGenre likedGenre=client.data().getLiked(id);
+                    client.data().deleteLiked(likedGenre);
                     genres.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
-
                     return true;
                 }
             });

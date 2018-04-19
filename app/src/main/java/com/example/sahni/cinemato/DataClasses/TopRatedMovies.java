@@ -18,11 +18,10 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         )
 })
 public class TopRatedMovies {
-    @PrimaryKey @NonNull
+    @PrimaryKey(autoGenerate = true) @NonNull
     public long id;
     public long movieId;
-    public TopRatedMovies(long id, long movieId){
-        this.id=id;
+    public TopRatedMovies( long movieId){
         this.movieId=movieId;
     }
 }

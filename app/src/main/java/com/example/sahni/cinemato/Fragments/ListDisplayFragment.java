@@ -188,10 +188,24 @@ public class ListDisplayFragment extends Fragment {
                         final long genreId=getArguments().getLong(Constant.GENRE_ID);
                         genre=client.data().selectedGenre(genreId);
                         supportActionBar.setTitle(genre.name);
-                        List<Long> movieIds=client.data().getMovieIds(genreId);
-                        for(int i=0;i<movieIds.size();i++)
-                            movies.add(client.data().selectedMovie(movieIds.get(i)));
-                        movieListAdapter.notifyDataSetChanged();
+                        ArrayList<Long> genreMovieIds =new ArrayList<>(client.data().getMovieIds(genreId));
+                        for(int i = 0; i< genreMovieIds.size(); i++)
+                            movies.add(client.data().selectedMovie(genreMovieIds.get(i)));
+                        Call<MovieResult> call=ApiClient.getInstance().getAPI().GenreMovies(genreId,1);
+                        call.enqueue(new Callback<MovieResult>() {
+                            @Override
+                            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
+                                Log.e("GENRE MOVIE", "onResponse: "+response.body().movies.size() );
+                                movies.clear();
+                                movies.addAll(response.body().movies);
+                                movieListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MovieResult> call, Throwable t) {
+
+                            }
+                        });
                         list.addOnScrollListener(new RecyclerView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -222,7 +236,10 @@ public class ListDisplayFragment extends Fragment {
             case Constant.GENRE:
                 genres=new ArrayList<>();
                 supportActionBar.setTitle("Favourite Genres");
-                genres.addAll(client.data().getLiked(true));
+                List<Long> likedIds=client.data().getAllLiked();
+                if(likedIds!=null)
+                for(int i=0;i<likedIds.size();i++)
+                    genres.add(client.data().selectedGenre(likedIds.get(i)));
                 genresAdapter=new GenresAdapter(getActivity(), genres, new ItemClickCallback() {
                     @Override
                     public void OnClick(long id) {

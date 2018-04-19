@@ -14,6 +14,7 @@ import com.example.sahni.cinemato.Constant;
 import com.example.sahni.cinemato.DataBase.DatabaseClient;
 import com.example.sahni.cinemato.DataClasses.FavouriteMovies;
 import com.example.sahni.cinemato.DataClasses.Movie;
+import com.example.sahni.cinemato.DataClasses.MovieGenreRelationship;
 import com.example.sahni.cinemato.R;
 import com.squareup.picasso.Picasso;
 
@@ -62,8 +63,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Hold
                 long id= (long) fav.getTag();
                 Movie movie=client.data().selectedMovie(id);
                 if(movie==null){
-                    client.data().updateMovie(movies.get(position));
+                    client.data().insertMovie(movies.get(position));
                     movie=client.data().selectedMovie(id);
+                    for(int i=0;i<movies.get(position).genre_ids.size();i++){
+                        long genreId=movies.get(position).genre_ids.get(i);
+                        long movieId=movies.get(position).id;
+                        if(client.data().getRelation(genreId,movieId).size()==0){
+                            client.data().InsertMovieGenreRelation(new MovieGenreRelationship(genreId,movieId));
+                        }
+                    }
                 }
                 if(client.data().getFavourite(movie.id)!=null) {
                     FavouriteMovies favouriteMovies=DatabaseClient.getInstance(context).data().getFavourite(id);
@@ -81,6 +89,40 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Hold
                 }
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ImageView fav=v.findViewById(R.id.favourite);
+                long id= (long) fav.getTag();
+                Movie movie=client.data().selectedMovie(id);
+                if(movie==null){
+                    client.data().insertMovie(movies.get(position));
+                    movie=client.data().selectedMovie(id);
+                    for(int i=0;i<movies.get(position).genre_ids.size();i++){
+                        long genreId=movies.get(position).genre_ids.get(i);
+                        long movieId=movies.get(position).id;
+                        if(client.data().getRelation(genreId,movieId).size()==0){
+                            client.data().InsertMovieGenreRelation(new MovieGenreRelationship(genreId,movieId));
+                        }
+                    }
+                }
+                if(client.data().getFavourite(movie.id)!=null) {
+                    FavouriteMovies favouriteMovies=DatabaseClient.getInstance(context).data().getFavourite(id);
+                    client.data().deleteFavourite(favouriteMovies);
+                    fav.setImageResource(R.drawable.un_favourite);
+                    if(type==Constant.FAVOURITE_LIST){
+                        movies.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                    }
+                }
+                else {
+                    client.data().insertFavourite(new FavouriteMovies(id));
+                    fav.setImageResource(R.drawable.favourite);
+                    Toast.makeText(context,"Added to Favourites",Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
         holder.title.setText(movies.get(position).title);
         client = DatabaseClient.getInstance(context);
         holder.description.setText(getGenreDescription(position));
@@ -89,7 +131,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Hold
     private String getGenreDescription(int position) {
         List<Long> genre;
         genre=client.data().getGenreIds(movies.get(position).id);
-        if(genre.size()==0)
+        if(client.data().selectedMovie(movies.get(position).id)==null)
             genre.addAll(movies.get(position).genre_ids);
         ArrayList<String> name=new ArrayList<>();
         StringBuffer buffer=new StringBuffer();

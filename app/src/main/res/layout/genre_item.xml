@@ -22,11 +22,24 @@
         android:gravity="center"
         android:background="@android:color/transparent"
         android:layout_gravity="center"/>
-    <ImageView
-        android:id="@+id/like"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_margin="3dp"
-        android:layout_gravity="bottom|left"
-        app:srcCompat="@drawable/ratings"/>
+    <LinearLayout
+        android:layout_marginBottom="3dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/Background"
+        android:alpha=".7">
+        <ImageView
+            android:id="@+id/like"
+            android:alpha="1"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/unlike"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1.5dp"
+            android:layout_marginBottom="1.5dp"/>
+    </LinearLayout>
 </FrameLayout>

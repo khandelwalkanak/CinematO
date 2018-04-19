@@ -27,4 +27,9 @@ public class Constant {
     public static final int TOP_LIST=4;
     public static final int FAVOURITE_LIST=5;
     public static final String GENRE_ID = "genre_id" ;
+    //
+    public static final int DISPLAY=2;
+    public static final String DISPLAY_TYPE="display_type";
+    public static final int MOVIE_DISPLAY=1;
+    public static final int TV_DISPLAY=2;
 }

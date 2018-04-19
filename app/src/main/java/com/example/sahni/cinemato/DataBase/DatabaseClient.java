@@ -7,6 +7,7 @@ import android.content.Context;
 
 import com.example.sahni.cinemato.Constant;
 import com.example.sahni.cinemato.DataClasses.FavouriteMovies;
+import com.example.sahni.cinemato.DataClasses.LikedMovieGenre;
 import com.example.sahni.cinemato.DataClasses.Movie;
 import com.example.sahni.cinemato.DataClasses.MovieGenre;
 import com.example.sahni.cinemato.DataClasses.MovieGenreRelationship;
@@ -26,7 +27,8 @@ import com.example.sahni.cinemato.DataClasses.UpcomingMovies;
                         UpcomingMovies.class,
                         FavouriteMovies.class,
                         NowPlayingMovies.class,
-                        TopRatedMovies.class
+                        TopRatedMovies.class,
+                        LikedMovieGenre.class
                     }, version = 1)
 public abstract class DatabaseClient extends RoomDatabase {
     private static DatabaseClient INSTANCE;
