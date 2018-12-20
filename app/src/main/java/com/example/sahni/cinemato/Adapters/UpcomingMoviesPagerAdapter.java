@@ -92,7 +92,7 @@ public class UpcomingMoviesPagerAdapter extends FragmentPagerAdapter {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            final View itemView=inflater.inflate(R.layout.movie_upcoming,container,false);
+            final View itemView=inflater.inflate(R.layout.pager_item,container,false);
             ImageView poster=itemView.findViewById(R.id.poster);
             ImageView backdrop=itemView.findViewById(R.id.backdrop);
             TextView title=itemView.findViewById(R.id.title);

@@ -9,6 +9,6 @@ import java.util.ArrayList;
  * Created by sahni on 12/4/18.
  */
 
-public class GenreResult {
+public class MovieGenreResult {
     public ArrayList<MovieGenre> genres;
 }

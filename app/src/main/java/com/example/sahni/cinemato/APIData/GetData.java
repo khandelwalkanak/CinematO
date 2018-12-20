@@ -1,9 +1,6 @@
 package com.example.sahni.cinemato.APIData;
 
 import com.example.sahni.cinemato.Constant;
-import com.example.sahni.cinemato.DataClasses.MovieGenre;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -33,5 +30,5 @@ public interface GetData {
     Call<MovieResult> GenreMovies(@Path("genre_id") long id,@Query(Constant.PAGE) int page);
 
     @GET("genre/movie/list?"+ API_KEY+"="+ key)
-    Call<GenreResult> Genre();
+    Call<MovieGenreResult> Genre();
 }

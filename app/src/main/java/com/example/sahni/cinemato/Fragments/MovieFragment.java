@@ -1,12 +1,10 @@
 package com.example.sahni.cinemato.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.sahni.cinemato.APIData.ApiClient;
-import com.example.sahni.cinemato.APIData.GenreResult;
+import com.example.sahni.cinemato.APIData.MovieGenreResult;
 import com.example.sahni.cinemato.APIData.MovieResult;
 import com.example.sahni.cinemato.Activities.DisplayActivity;
 import com.example.sahni.cinemato.Adapters.GenresAdapter;
@@ -149,10 +147,10 @@ public class MovieFragment extends Fragment implements UpdateAllLists {
         if (genres.size() != 0)
             genresSet = true;
         if (!genresSet) {
-            Call<GenreResult> resultCall = ApiClient.getInstance().getAPI().Genre();
-            resultCall.enqueue(new Callback<GenreResult>() {
+            Call<MovieGenreResult> resultCall = ApiClient.getInstance().getAPI().Genre();
+            resultCall.enqueue(new Callback<MovieGenreResult>() {
                 @Override
-                public void onResponse(Call<GenreResult> call, Response<GenreResult> response) {
+                public void onResponse(Call<MovieGenreResult> call, Response<MovieGenreResult> response) {
                     genres.clear();
                     genres.addAll(response.body().genres);
                     MovieGenre.setPaths(genres, new MovieGenre.CallBack() {
@@ -167,7 +165,7 @@ public class MovieFragment extends Fragment implements UpdateAllLists {
                 }
 
                 @Override
-                public void onFailure(Call<GenreResult> call, Throwable t) {
+                public void onFailure(Call<MovieGenreResult> call, Throwable t) {
                     failure = true;
                     CheckComplete();
                 }
