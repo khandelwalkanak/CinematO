@@ -1,4 +1,5 @@
 package com.example.sahni.cinemato.Activities;
+//CinematO Application
 
 import android.os.Bundle;
 import android.app.Activity;
