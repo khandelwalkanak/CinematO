@@ -1,6 +1,6 @@
 # CinematO
 
-This is an Android Application Project, where i cloned the ImDB application with functionality to search upcoming movie, T.V shows and celebrities information.
+This is an Android Application Project, where i cloned the ImDB application with functionality to search different movie, T.V shows and celebrities information.
 The json data is used from <themoviedb.org> and json parser is used to store the data in local database (Rooms) using SQLite.
 
 Functionality includes, listing based on genre and simple listing, adding favourite movies, genres, searching for a particular movie, tv show, celeb, fragments 
